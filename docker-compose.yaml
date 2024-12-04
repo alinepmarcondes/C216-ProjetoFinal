@@ -1,0 +1,25 @@
+services:
+
+  backend:
+    build: ./backend
+    restart: always
+    ports:
+      - "8000:8000"
+
+  db:
+      image: postgres
+      restart: always
+      ports:
+        - "5432:5432"
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: produtos
+  
+  # frontend:
+  #   build: ./frontend
+  #   restart: always
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - backend

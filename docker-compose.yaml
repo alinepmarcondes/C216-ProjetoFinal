@@ -1,5 +1,4 @@
 services:
-
   backend:
     build: ./backend
     restart: always
@@ -7,15 +6,17 @@ services:
       - "8000:8000"
 
   db:
-      image: postgres
-      restart: always
-      ports:
-        - "5432:5432"
-      environment:
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: postgres
-        POSTGRES_DB: produtos
-  
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: produtos
+    volumes:
+      - ./backend/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
   # frontend:
   #   build: ./frontend
   #   restart: always

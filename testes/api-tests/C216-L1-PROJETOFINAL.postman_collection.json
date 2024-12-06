@@ -1,0 +1,458 @@
+{
+	"info": {
+		"_postman_id": "af466370-1fa1-4fdd-8eb7-7537af96cb69",
+		"name": "C216-L1-PROJETOFINAL",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29764641",
+		"_collection_link": "https://gold-firefly-432579.postman.co/workspace/Aulas~fc193277-0f59-4f8a-a9a3-951ae40d4681/collection/29764641-af466370-1fa1-4fdd-8eb7-7537af96cb69?action=share&source=collection_link&creator=29764641"
+	},
+	"item": [
+		{
+			"name": "DELETE - Remover todos os produtos (RESETAR BANCO DE DADOS)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response should confirm deletion\", function () {\r",
+							"    pm.expect(pm.response.json().message).to.eql('Banco de dados limpo com sucesso!');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/produtos/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"produtos",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET - Listar todas os produtos",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response should be a list\", function () {\r",
+							"    pm.expect(pm.response.json()).to.be.an('array');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/produtos/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"produtos",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET - Buscar produto por ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response should contain product details\", function () {\r",
+							"    pm.expect(pm.response.json()).to.have.property('nome');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/produtos/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"produtos",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST - Adicionar um produto",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"pm.test(\"Response should contain confirmation message\", function () {\r",
+							"    pm.expect(pm.response.json().message).to.eql('Produto adicionado com sucesso!');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"Bola Espinho\",\r\n    \"marca\": \"Petz\",\r\n    \"animal\": \"Cachorro\",\r\n    \"idade\": \"Filhote e Adulto\",\r\n    \"quantidade\": 75,\r\n    \"preco\": 33.9\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/produtos/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"produtos",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT - Vender um produto",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response should confirm sale\", function () {\r",
+							"    pm.expect(pm.response.json().message).to.eql('Venda realizada com sucesso!');\r",
+							"});\r",
+							"\r",
+							"// Validar se a quantidade foi reduzida\r",
+							"pm.sendRequest(\"http://127.0.0.1:8000/api/v1/produtos/1\", function (err, res) {\r",
+							"    pm.test(\"Quantidade de produtos foi atualizada\", function () {\r",
+							"        let art = res.json();\r",
+							"        pm.expect(art.quantidade).to.eql(49); // A quantidade deve ter sido reduzida\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"quantidade\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/produtos/1/vender/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"produtos",
+						"1",
+						"vender",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET - Listar todas as vendas",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response should confirm sales details\", function () {\r",
+							"    let venda = pm.response.json()[0];\r",
+							"    pm.expect(venda.valor_venda).to.eql(100.00); \r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/vendas/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"vendas",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH - Atualizar Atributos de um produto",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response should confirm update\", function () {\r",
+							"    pm.expect(pm.response.json().message).to.eql('Produto atualizada com sucesso!');\r",
+							"});\r",
+							"\r",
+							"// Validar se o produto foi atualizado corretamente\r",
+							"pm.sendRequest(\"http://127.0.0.1:8000/api/v1/produtos/3\", function (err, res) {\r",
+							"    pm.test(\"Os atributos do produto foram atualizados\", function () {\r",
+							"        let prd = res.json();\r",
+							"        pm.expect(prd.nome).to.eql(\"Ração Premium\");\r",
+							"        pm.expect(prd.marca).to.eql(\"Whiskas\");\r",
+							"        pm.expect(prd.animal).to.eql(\"Gato\");\r",
+							"        pm.expect(prd.idade).to.eql(\"1-2 anos\");\r",
+							"        pm.expect(prd.quantidade).to.eql(40); \r",
+							"        pm.expect(prd.preco).to.eql(150.0);\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"Ração Premium\",\r\n    \"marca\": \"Whiskas\",\r\n    \"animal\": \"Gato\",\r\n    \"idade\": \"1-2 anos\",\r\n    \"quantidade\": 40,\r\n    \"preco\": 150.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/produtos/3",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"produtos",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE - Remover um produto",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response should confirm deletion\", function () {\r",
+							"    pm.expect(pm.response.json().message).to.eql('Produto removido com sucesso!');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/produtos/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"produtos",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE - Remover Todos os produtos (RESETAR BANCO DE DADOS)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response should confirm deletion\", function () {\r",
+							"    pm.expect(pm.response.json().message).to.eql('Banco de dados limpo com sucesso!');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/produtos/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"produtos",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

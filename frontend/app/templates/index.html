@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Produtos</h1>
+
+<!-- Dashboard Resumido -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Produtos Cadastrados</h5>
+                <p class="card-text">{{ produtos|length }} produtos</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">Estoque Baixo</h5>
+                <p class="card-text">{{ produtos|selectattr('quantidade', 'lt', 5)|list|length }} produtos</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Receita Total</h5>
+                <p class="card-text">R$ {{ vendas|map(attribute='valor_venda')|sum }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Botões principais -->
+<div class="mb-3">
+    <a href="/add" class="btn btn-primary">Adicionar Produto</a>
+    <a href="/vendas" class="btn btn-info">Ver Vendas</a>
+</div>
+
+<!-- Filtros -->
+<form method="GET" class="mb-4 row">
+    <div class="col-md-3">
+        <label for="animal" class="form-label">Tipo de Animal</label>
+        <select id="animal" name="animal" class="form-select">
+            <option value="" {% if not filters.get('animal') %}selected{% endif %}>Todos</option>
+            <option value="Cachorro" {% if filters.get('animal') == 'Cachorro' %}selected{% endif %}>Cachorro</option>
+            <option value="Gato" {% if filters.get('animal') == 'Gato' %}selected{% endif %}>Gato</option>
+            <option value="Pássaro" {% if filters.get('animal') == 'Pássaro' %}selected{% endif %}>Pássaro</option>
+            <option value="Outros" {% if filters.get('animal') == 'Outros' %}selected{% endif %}>Outros</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label for="idade" class="form-label">Idade</label>
+        <select id="idade" name="idade" class="form-select">
+            <option value="" {% if not filters.get('idade') %}selected{% endif %}>Todas</option>
+            <option value="Filhote" {% if filters.get('idade') == 'Filhote' %}selected{% endif %}>Filhote</option>
+            <option value="Adulto" {% if filters.get('idade') == 'Adulto' %}selected{% endif %}>Adulto</option>
+            <option value="Idoso" {% if filters.get('idade') == 'Idoso' %}selected{% endif %}>Idoso</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label for="order_by" class="form-label">Ordenar Por</label>
+        <select id="order_by" name="order_by" class="form-select">
+            <option value="" {% if not filters.get('order_by') %}selected{% endif %}>Sem Ordenação</option>
+            <option value="preco" {% if filters.get('order_by') == 'preco' %}selected{% endif %}>Preço</option>
+            <option value="quantidade" {% if filters.get('order_by') == 'quantidade' %}selected{% endif %}>Quantidade</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label for="order" class="form-label">Ordem</label>
+        <select id="order" name="order" class="form-select">
+            <option value="asc" {% if filters.get('order') == 'asc' %}selected{% endif %}>Crescente</option>
+            <option value="desc" {% if filters.get('order') == 'desc' %}selected{% endif %}>Decrescente</option>
+        </select>
+    </div>
+    <div class="col-md-12 mt-3">
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+        <a href="/" class="btn btn-secondary">Limpar Filtros</a>
+    </div>
+</form>
+
+<!-- Listagem em Cards -->
+<div class="row">
+    {% for produto in produtos %}
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <img src="{{ produto.image_url or '/static/default.jpg' }}" class="card-img-top" alt="{{ produto.nome }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ produto.nome }}</h5>
+                <p class="card-text"><strong>Marca:</strong> {{ produto.marca }}</p>
+                <p class="card-text"><strong>Animal:</strong> {{ produto.animal }}</p>
+                <p class="card-text"><strong>Idade:</strong> {{ produto.idade }}</p>
+                <p class="card-text {% if produto.quantidade < 5 %}text-danger{% endif %}">
+                    <strong>Estoque:</strong> {{ produto.quantidade }}
+                </p>
+                <p class="card-text"><strong>Preço:</strong> R$ {{ produto.preco }}</p>
+                <a href="/vender/{{ produto.id }}" class="btn btn-success btn-sm">Vender</a>
+                <a href="/edit/{{ produto.id }}" class="btn btn-warning btn-sm">Editar</a>
+                <form action="/delete/{{ produto.id }}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Resetar Banco -->
+<form method="post" action="/reset" style="display:inline;">
+    <button type="submit" class="btn btn-danger">Resetar Banco de Dados</button>
+</form>
+
+<!-- Modo Escuro -->
+<div class="mt-4">
+    <button class="btn btn-dark" id="toggleTheme">Alternar Tema</button>
+</div>
+<script>
+    document.getElementById('toggleTheme').addEventListener('click', function () {
+        document.body.classList.toggle('bg-dark');
+        document.body.classList.toggle('text-white');
+    });
+</script>
+{% endblock %}

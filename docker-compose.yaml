@@ -4,6 +4,10 @@ services:
     restart: always
     ports:
       - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      PGURL: "postgres://postgres:postgres@db:5432/produtos"
 
   db:
     image: postgres
@@ -17,10 +21,14 @@ services:
     volumes:
       - ./backend/db/init.sql:/docker-entrypoint-initdb.d/init.sql
 
-  # frontend:
-  #   build: ./frontend
-  #   restart: always
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - backend
+  frontend:
+    build: ./frontend
+    restart: always
+    ports:
+      - "5001:5000"
+    depends_on:
+      - backend
+    environment:
+      FLASK_APP: "app"
+      FLASK_ENV: "development"
+      API_URL: "http://backend:8000/api/v1/produtos/"

@@ -3,13 +3,35 @@
 {% block content %}
 <h2>Lista de Vendas</h2>
 
+<!-- Abas de Filtro -->
+<ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+        <a class="nav-link {% if not filters.get('order_by') %}active{% endif %}" href="/vendas">Todas as Vendas</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if filters.get('order_by') == 'quantidade_vendida' %}active{% endif %}" href="/vendas?order_by=quantidade_vendida&order=desc">Mais Vendidos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if filters.get('order_by') == 'valor_venda' %}active{% endif %}" href="/vendas?order_by=valor_venda&order=desc">Maior Receita</a>
+    </li>
+</ul>
+
+<!-- Botão para Exibir/Ocultar Gráfico -->
+<button id="toggleGraph" class="btn btn-info mb-4">Ocultar Gráfico</button>
+
 <!-- Gráfico de Vendas -->
-<div class="mb-5">
+<div id="graphContainer" class="mb-5">
     <canvas id="vendasChart" width="400" height="200"></canvas>
 </div>
 
+<!-- Campo de Filtro para Tabela -->
+<div class="mb-4">
+    <label for="filterTable" class="form-label">Buscar na Tabela</label>
+    <input type="text" id="filterTable" class="form-control" placeholder="Digite para filtrar...">
+</div>
+
 <!-- Tabela de Vendas -->
-<table class="table table-striped">
+<table class="table table-striped" id="salesTable">
     <thead>
         <tr>
             <th>ID</th>
@@ -33,7 +55,7 @@
 </table>
 <a href="/" class="btn btn-secondary">Voltar</a>
 
-<!-- Scripts para o Gráfico -->
+<!-- Scripts para o Gráfico e Funcionalidades -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -41,11 +63,11 @@
         const chartLabels = JSON.parse('{{ vendas|map(attribute="produto_nome")|list|tojson|safe }}');
         const quantidadeDataset = JSON.parse('{{ vendas|map(attribute="quantidade_vendida")|list|tojson|safe }}');
         const valorDataset = JSON.parse('{{ vendas|map(attribute="valor_venda")|list|tojson|safe }}');
-    
+
         // Gráfico de vendas
         const ctx = document.getElementById('vendasChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar', // Tipo de gráfico: barras
+        const vendasChart = new Chart(ctx, {
+            type: 'bar',
             data: {
                 labels: chartLabels,
                 datasets: [
@@ -96,6 +118,33 @@
                 }
             }
         });
+
+        // Lógica para Exibir/Ocultar Gráfico
+        const toggleGraphButton = document.getElementById('toggleGraph');
+        const graphContainer = document.getElementById('graphContainer');
+        toggleGraphButton.addEventListener('click', () => {
+            if (graphContainer.style.display === 'none') {
+                graphContainer.style.display = 'block';
+                toggleGraphButton.textContent = 'Ocultar Gráfico';
+            } else {
+                graphContainer.style.display = 'none';
+                toggleGraphButton.textContent = 'Exibir Gráfico';
+            }
+        });
+
+        // Lógica de Filtro para a Tabela
+        const filterInput = document.getElementById('filterTable');
+        const table = document.getElementById('salesTable');
+        filterInput.addEventListener('keyup', () => {
+            const filter = filterInput.value.toLowerCase();
+            const rows = table.getElementsByTagName('tr');
+            Array.from(rows).forEach((row, index) => {
+                if (index === 0) return; // Pular o cabeçalho
+                const cells = row.getElementsByTagName('td');
+                const rowText = Array.from(cells).map(cell => cell.textContent.toLowerCase()).join(' ');
+                row.style.display = rowText.includes(filter) ? '' : 'none';
+            });
+        });
     });
-</script>    
+</script>
 {% endblock %}

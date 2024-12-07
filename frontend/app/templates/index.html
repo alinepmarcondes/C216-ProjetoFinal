@@ -30,34 +30,31 @@
     </div>
 </div>
 
-<!-- Botões principais -->
-<div class="mb-3">
-    <a href="/add" class="btn btn-primary">Adicionar Produto</a>
-    <a href="/vendas" class="btn btn-info">Ver Vendas</a>
-</div>
+<!-- Abas de Filtro por Animal -->
+<ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+        <a class="nav-link {% if not filters.get('animal') %}active{% endif %}" href="/?{{ request.query_string|safe }}">Todos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if filters.get('animal') == 'Cachorro' %}active{% endif %}" href="/?animal=Cachorro&{{ request.query_string|safe }}">Cachorros</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if filters.get('animal') == 'Gato' %}active{% endif %}" href="/?animal=Gato&{{ request.query_string|safe }}">Gatos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if filters.get('animal') == 'Pássaro' %}active{% endif %}" href="/?animal=Pássaro&{{ request.query_string|safe }}">Pássaros</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if filters.get('animal') == 'Outros' %}active{% endif %}" href="/?animal=Outros&{{ request.query_string|safe }}">Outros</a>
+    </li>
+</ul>
 
-<!-- Filtros -->
+<!-- Ordenação -->
 <form method="GET" class="mb-4 row">
-    <div class="col-md-3">
-        <label for="animal" class="form-label">Tipo de Animal</label>
-        <select id="animal" name="animal" class="form-select">
-            <option value="" {% if not filters.get('animal') %}selected{% endif %}>Todos</option>
-            <option value="Cachorro" {% if filters.get('animal') == 'Cachorro' %}selected{% endif %}>Cachorro</option>
-            <option value="Gato" {% if filters.get('animal') == 'Gato' %}selected{% endif %}>Gato</option>
-            <option value="Pássaro" {% if filters.get('animal') == 'Pássaro' %}selected{% endif %}>Pássaro</option>
-            <option value="Outros" {% if filters.get('animal') == 'Outros' %}selected{% endif %}>Outros</option>
-        </select>
-    </div>
-    <div class="col-md-3">
-        <label for="idade" class="form-label">Idade</label>
-        <select id="idade" name="idade" class="form-select">
-            <option value="" {% if not filters.get('idade') %}selected{% endif %}>Todas</option>
-            <option value="Filhote" {% if filters.get('idade') == 'Filhote' %}selected{% endif %}>Filhote</option>
-            <option value="Adulto" {% if filters.get('idade') == 'Adulto' %}selected{% endif %}>Adulto</option>
-            <option value="Idoso" {% if filters.get('idade') == 'Idoso' %}selected{% endif %}>Idoso</option>
-        </select>
-    </div>
-    <div class="col-md-3">
+    {% if filters.get('animal') %}
+    <input type="hidden" name="animal" value="{{ filters.get('animal') }}">
+    {% endif %}
+    <div class="col-md-6">
         <label for="order_by" class="form-label">Ordenar Por</label>
         <select id="order_by" name="order_by" class="form-select">
             <option value="" {% if not filters.get('order_by') %}selected{% endif %}>Sem Ordenação</option>
@@ -65,7 +62,7 @@
             <option value="quantidade" {% if filters.get('order_by') == 'quantidade' %}selected{% endif %}>Quantidade</option>
         </select>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-6">
         <label for="order" class="form-label">Ordem</label>
         <select id="order" name="order" class="form-select">
             <option value="asc" {% if filters.get('order') == 'asc' %}selected{% endif %}>Crescente</option>
@@ -73,7 +70,7 @@
         </select>
     </div>
     <div class="col-md-12 mt-3">
-        <button type="submit" class="btn btn-primary">Filtrar</button>
+        <button type="submit" class="btn btn-primary">Ordenar</button>
         <a href="/" class="btn btn-secondary">Limpar Filtros</a>
     </div>
 </form>

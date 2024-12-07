@@ -99,13 +99,28 @@ def vender(produto_id):
     produto = requests.get(f"{API_BASE_URL}{produto_id}").json()
     return render_template("vender.html", produto=produto)
 
-# Listar vendas
+# Mostrar vendas
 @main.route("/vendas")
 def listar_vendas():
     try:
+        # Obter todos os parâmetros de query
+        order_by = request.args.get("order_by")
+        order = request.args.get("order", "desc")
+
+        # Fazer a solicitação ao backend sem parâmetros adicionais
         response = requests.get("http://backend:8000/api/v1/vendas/")
         vendas = response.json()
-        return render_template("vendas.html", vendas=vendas)
+
+        # Aplicar ordenação no frontend
+        if order_by in ['quantidade_vendida', 'valor_venda']:
+            vendas = sorted(vendas, key=lambda x: x[order_by], reverse=(order == "desc"))
+
+        filters = {
+            "order_by": order_by,
+            "order": order
+        }
+
+        return render_template("vendas.html", vendas=vendas, filters=filters)
     except Exception as e:
         flash("Erro ao conectar à API ou buscar vendas.", "danger")
         return redirect(url_for("main.index"))

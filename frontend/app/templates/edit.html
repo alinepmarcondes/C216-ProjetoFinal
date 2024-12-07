@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Editar Produto</h2>
+<form method="POST">
+    <div class="mb-3">
+        <label for="nome" class="form-label">Nome do Produto</label>
+        <input type="text" id="nome" name="nome" class="form-control" value="{{ produto['nome'] }}" required>
+    </div>
+    <div class="mb-3">
+        <label for="marca" class="form-label">Marca</label>
+        <input type="text" id="marca" name="marca" class="form-control" value="{{ produto['marca'] }}" required>
+    </div>
+    <div class="mb-3">
+        <label for="animal" class="form-label">Animal</label>
+        <select id="animal" name="animal" class="form-select" required>
+            <option value="Cachorro" {% if produto['animal'] == "Cachorro" %}selected{% endif %}>Cachorro</option>
+            <option value="Gato" {% if produto['animal'] == "Gato" %}selected{% endif %}>Gato</option>
+            <option value="Pássaro" {% if produto['animal'] == "Pássaro" %}selected{% endif %}>Pássaro</option>
+            <option value="Outros" {% if produto['animal'] == "Outros" %}selected{% endif %}>Outros</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="idade" class="form-label">Idade do Animal</label>
+        <select id="idade" name="idade" class="form-select" required>
+            <option value="Filhote" {% if produto['idade'] == "Filhote" %}selected{% endif %}>Filhote</option>
+            <option value="Adulto" {% if produto['idade'] == "Adulto" %}selected{% endif %}>Adulto</option>
+            <option value="Idoso" {% if produto['idade'] == "Idoso" %}selected{% endif %}>Idoso</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="quantidade" class="form-label">Quantidade</label>
+        <input type="number" id="quantidade" name="quantidade" class="form-control" value="{{ produto['quantidade'] }}" required>
+    </div>
+    <div class="mb-3">
+        <label for="preco" class="form-label">Preço</label>
+        <input type="number" step="0.01" id="preco" name="preco" class="form-control" value="{{ produto['preco'] }}" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+    <a href="/" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}
